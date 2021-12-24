@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>Playground</title>
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin: 0;
+      }
+
+      body,
+      textarea {
+        background: #292827;
+        color: #fff;
+        caret-color: #fff;
+      }
+
+      textarea {
+        font-family: monospace;
+        font-size: 10pt;
+        line-height: 16px;
+        padding: 0;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <textarea id="output" is="textarea-code" rows="15" cols="80"></textarea>
+    <script src="./app.ts" type="module"></script>
+  </body>
+</html>
