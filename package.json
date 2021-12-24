@@ -32,7 +32,7 @@
     "cov:web": "web-test-runner --coverage",
     "test": "jest",
     "cov": "jest --coverage",
-    "playground": "vite --config vite.config.ts --force --cors --https --clearScreen=false --open /playground/",
+    "playground": "vite --force --cors --https --clearScreen=false --open /playground/",
     "lint": "eslint src && prettier --check src",
     "build:watch": "onchange -i src --await-write-finish 400 -- npm run build",
     "docs:watch": "onchange -i src --await-write-finish 400 -- npm run docs",
