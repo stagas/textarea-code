@@ -40,7 +40,7 @@
     "cov:watch": "jest --coverage --watchAll",
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "build:esm": "tsc -p tsconfig.esm.json && echo '{\"type\":\"module\"}' >dist/esm/package.json",
-    "build:min": "esbuild src/index.ts --bundle --format=esm | terser --compress --module --mangle -o build.min.js",
+    "build:min": "esbuild src/index.ts --bundle --format=esm | terser --compress --module --mangle -o textarea-code.min.js",
     "lint:fix": "eslint --fix src && prettier --write src",
     "clean": "rimraf dist",
     "prepack": "npm run build",
