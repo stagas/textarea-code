@@ -49,7 +49,7 @@ Only ~**2.6kb** minified + brotli!
 
 ### TextAreaCodeElement
 
-[src/index.ts:16-143](https://github.com/stagas/textarea-code/blob/dc2fe4f1fe71f2620939c406212ea6e1a26fb5b0/src/index.ts#L16-L143 "Source code on GitHub")
+[src/index.ts:16-143](https://github.com/stagas/textarea-code/blob/afa840317cec2dee7f32c3651434909cc4aa8d47/src/index.ts#L16-L143 "Source code on GitHub")
 
 **Extends HTMLTextAreaElement**
 
