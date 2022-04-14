@@ -17,7 +17,7 @@ export class Buffer {
   constructor(
     textarea: HTMLTextAreaElement,
     insert: (text: string) => void,
-    options: Partial<Options> = {}
+    options: Partial<Options> = {},
   ) {
     this.#text = textarea
     this.insert = insert
@@ -116,7 +116,7 @@ export class Buffer {
   moveCaretTo(
     { line, col }: Point,
     selection?: Point | null,
-    direction = this.#text.selectionDirection
+    direction = this.#text.selectionDirection,
   ) {
     const headPos = this.getPositionFromLineCol({ line, col })
     const tailPos = selection ? this.getPositionFromLineCol(selection) : headPos
@@ -134,7 +134,7 @@ export class Buffer {
   }
 
   replaceBlock(
-    replacer: (text: string, startLine: number) => { diff: number; text: string; left: Point }
+    replacer: (text: string, startLine: number) => { diff: number; text: string; left: Point },
   ) {
     const { start, end, hasSelection, selectionDirection } = this.getRange()
     const first = this.lineAt(start.line - 1)
@@ -156,13 +156,11 @@ export class Buffer {
       this.getPositionFromLineCol({ line: end.line - +!notch, col: left.col + diff })
     )
 
-    const stillCaret =
-      !hasSelection &&
-      start.col <= left.col + diff &&
-      end.col <= left.col + diff &&
-      first.length !== 0
-    const startCol =
-      this.lineAt(start.line - 1) === first ? start.col : stillCaret ? start.col : start.col + diff
+    const stillCaret = !hasSelection
+      && start.col <= left.col + diff
+      && end.col <= left.col + diff
+      && first.length !== 0
+    const startCol = this.lineAt(start.line - 1) === first ? start.col : stillCaret ? start.col : start.col + diff
     const endCol = stillCaret
       ? end.col
       : this.lineAt(end.line - 1) === last
@@ -190,13 +188,12 @@ export class Buffer {
         text = text.replace(new RegExp(`^([^${comment[0]}]*)${comment} ?`, 'gm'), '$1')
       } else {
         diff = +3
-        text =
-          text.length === 0
-            ? comment + ' '
-            : text.replace(
-                new RegExp(`^(?!$)([^${comment[0]}]{0,${left.col - 1}})`, 'gm'),
-                `$1${comment} `
-              )
+        text = text.length === 0
+          ? comment + ' '
+          : text.replace(
+            new RegExp(`^(?!$)([^${comment[0]}]{0,${left.col - 1}})`, 'gm'),
+            `$1${comment} `
+          )
       }
       return { diff, text, left }
     })
@@ -209,8 +206,8 @@ export class Buffer {
     const c = this.options.comments
     const expanded = this.value.slice(selectionStart - c[1].length, selectionEnd + c[2].length)
     if (
-      expanded.indexOf(c[1]) === 0 &&
-      expanded.lastIndexOf(c[2]) === expanded.length - c[2].length
+      expanded.indexOf(c[1]) === 0
+      && expanded.lastIndexOf(c[2]) === expanded.length - c[2].length
     ) {
       slice = expanded
       selectionStart -= c[1].length
@@ -274,8 +271,7 @@ export class Buffer {
   }
 
   moveLines(diff: number) {
-    const { start, end, hasSelection, selectionStart, selectionEnd, selectionDirection } =
-      this.getRange()
+    const { start, end, hasSelection, selectionStart, selectionEnd, selectionDirection } = this.getRange()
 
     const lines = this.value.split('\n')
     const notch = end.col === 1 && hasSelection ? 1 : 0
@@ -328,8 +324,7 @@ export class Buffer {
   }
 
   duplicate() {
-    const { start, end, hasSelection, selectionStart, selectionEnd, selectionDirection } =
-      this.getRange()
+    const { start, end, hasSelection, selectionStart, selectionEnd, selectionDirection } = this.getRange()
     const { numberOfLines } = this
 
     if (!hasSelection) {
@@ -341,20 +336,18 @@ export class Buffer {
     const [sliceStart, sliceEnd] = this.getArea({ start, end })
     let slice = this.value.slice(sliceStart, sliceEnd)
     if (!hasSelection && slice.at(-1) !== '\n') {
-      if (numberOfLines > 1) {
+      if (numberOfLines > 1)
         slice = this.value.slice(sliceStart - 1, sliceEnd)
-      } else {
+      else
         slice = '\n' + slice
-      }
     }
     this.setSelectionRange(sliceEnd, sliceEnd)
     this.insert(slice)
     const length = slice.length
-    if (!hasSelection) {
+    if (!hasSelection)
       this.setSelectionRange(selectionStart + length, selectionEnd + length)
-    } else {
+    else
       this.setSelectionRange(sliceEnd, sliceEnd + length, selectionDirection)
-    }
     this.scrollIntoView()
   }
 
