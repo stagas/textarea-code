@@ -1,6 +1,6 @@
-import { Buffer } from '../buffer'
-import { SelectionDirection } from '../types'
-import { insert } from '../util'
+import { Buffer } from '../src/buffer'
+import { SelectionDirection } from '../src/types'
+import { insert } from '../src/util'
 
 const createTextArea = () => {
   const textarea = document.createElement('textarea')

@@ -1,7 +1,7 @@
-import { TextAreaCodeElement } from '../'
-
 // jsdom doesn't have ResizeObserver, so we polyfill it
 import ResizeObserverPolyfill from 'resize-observer-polyfill'
+import { TextAreaCodeElement } from '../src'
+
 window.ResizeObserver = ResizeObserverPolyfill
 
 describe('TextAreaCodeElement', () => {
@@ -30,10 +30,18 @@ describe('TextAreaCodeElement', () => {
     textarea.dispatchEvent(new KeyboardEvent('keydown', { key: 'PageUp' }))
     textarea.dispatchEvent(new KeyboardEvent('keydown', { key: 'PageDown' }))
 
-    textarea.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp', ctrlKey: true, shiftKey: true }))
-    textarea.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', ctrlKey: true, shiftKey: true }))
-    textarea.dispatchEvent(new KeyboardEvent('keydown', { key: 'PageUp', ctrlKey: true, shiftKey: true }))
-    textarea.dispatchEvent(new KeyboardEvent('keydown', { key: 'PageDown', ctrlKey: true, shiftKey: true }))
+    textarea.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'ArrowUp', ctrlKey: true, shiftKey: true })
+    )
+    textarea.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'ArrowDown', ctrlKey: true, shiftKey: true })
+    )
+    textarea.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'PageUp', ctrlKey: true, shiftKey: true })
+    )
+    textarea.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'PageDown', ctrlKey: true, shiftKey: true })
+    )
 
     textarea.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp', shiftKey: true }))
     textarea.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', shiftKey: true }))
@@ -64,31 +72,36 @@ describe('TextAreaCodeElement', () => {
   })
 
   it('accepts changes in attributes', () => {
-    const textarea = document.createElement('textarea', { is: 'textarea-code' }) as TextAreaCodeElement
+    const textarea = document.createElement('textarea', {
+      is: 'textarea-code',
+    }) as TextAreaCodeElement
 
     textarea.setAttribute('tabsize', '3')
-    expect(textarea.buffer.options.tabSize).toEqual(3)
+    expect(textarea.tabSize).toEqual(3)
     textarea.setAttribute('tabsize', '')
-    expect(textarea.buffer.options.tabSize).toEqual(2)
+    expect(textarea.tabSize).toEqual(2)
 
     textarea.setAttribute('tabstyle', '')
-    expect(textarea.buffer.options.tabStyle).toEqual('spaces')
+    expect(textarea.tabStyle).toEqual('spaces')
     textarea.setAttribute('tabstyle', 'spaces')
-    expect(textarea.buffer.options.tabStyle).toEqual('spaces')
+    expect(textarea.tabStyle).toEqual('spaces')
     textarea.setAttribute('tabstyle', 'tabs')
-    expect(textarea.buffer.options.tabStyle).toEqual('tabs')
+    expect(textarea.tabStyle).toEqual('tabs')
     textarea.setAttribute('tabstyle', 'other')
-    expect(textarea.buffer.options.tabStyle).toEqual('spaces')
+    expect(textarea.tabStyle).toEqual('spaces')
 
     textarea.setAttribute('comments', ';; (; ;)')
-    expect(textarea.buffer.options.comments).toEqual([';;', '(;', ';)'])
+    expect(textarea.comments).toEqual(';; (; ;)')
     textarea.setAttribute('comments', '')
-    expect(textarea.buffer.options.comments).toEqual(['//', '/*', '*/'])
+    expect(textarea.comments).toEqual('// /* */')
   })
 
+  // web only tests
   if (!window.navigator.userAgent.includes('jsdom'))
     it('adjusts pageSize on resize', async () => {
-      const textarea = document.createElement('textarea', { is: 'textarea-code' }) as TextAreaCodeElement
+      const textarea = document.createElement('textarea', {
+        is: 'textarea-code',
+      }) as TextAreaCodeElement
       document.body.appendChild(textarea)
       textarea.style.lineHeight = '16px'
       textarea.style.height = '250px'

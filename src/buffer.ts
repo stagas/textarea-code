@@ -1,5 +1,5 @@
 import { Point, SelectionDirection } from './types'
-import { startOfLine, leftmost } from './util'
+import { leftmost, startOfLine } from './util'
 
 export interface Options {
   tabStyle: 'spaces' | 'tabs'
@@ -14,7 +14,11 @@ export class Buffer {
   insert: (text: string) => void
   options: Options
 
-  constructor(textarea: HTMLTextAreaElement, insert: (text: string) => void, options: Partial<Options> = {}) {
+  constructor(
+    textarea: HTMLTextAreaElement,
+    insert: (text: string) => void,
+    options: Partial<Options> = {}
+  ) {
     this.#text = textarea
     this.insert = insert
     this.options = Object.assign({}, defaults, options)
@@ -109,7 +113,11 @@ export class Buffer {
     this.#text.setSelectionRange(start, end, direction)
   }
 
-  moveCaretTo({ line, col }: Point, selection?: Point | null, direction = this.#text.selectionDirection) {
+  moveCaretTo(
+    { line, col }: Point,
+    selection?: Point | null,
+    direction = this.#text.selectionDirection
+  ) {
     const headPos = this.getPositionFromLineCol({ line, col })
     const tailPos = selection ? this.getPositionFromLineCol(selection) : headPos
     if (selection) {
@@ -117,11 +125,17 @@ export class Buffer {
       this.setSelectionRange(pos, pos)
       this.scrollIntoView()
     }
-    this.setSelectionRange(Math.min(headPos, tailPos), Math.max(headPos, tailPos), headPos < tailPos ? 'backward' : 'forward')
+    this.setSelectionRange(
+      Math.min(headPos, tailPos),
+      Math.max(headPos, tailPos),
+      headPos < tailPos ? 'backward' : 'forward'
+    )
     this.scrollIntoView()
   }
 
-  replaceBlock(replacer: (text: string, startLine: number) => { diff: number; text: string; left: Point }) {
+  replaceBlock(
+    replacer: (text: string, startLine: number) => { diff: number; text: string; left: Point }
+  ) {
     const { start, end, hasSelection, selectionDirection } = this.getRange()
     const first = this.lineAt(start.line - 1)
     const last = this.lineAt(end.line - 1)
@@ -138,10 +152,17 @@ export class Buffer {
 
     this.setSelectionRange(sliceStart, sliceEnd)
     this.insert(text)
-    this.scrollIntoView(this.getPositionFromLineCol({ line: end.line - +!notch, col: left.col + diff }))
+    this.scrollIntoView(
+      this.getPositionFromLineCol({ line: end.line - +!notch, col: left.col + diff })
+    )
 
-    const stillCaret = !hasSelection && start.col <= left.col + diff && end.col <= left.col + diff && first.length !== 0
-    const startCol = this.lineAt(start.line - 1) === first ? start.col : stillCaret ? start.col : start.col + diff
+    const stillCaret =
+      !hasSelection &&
+      start.col <= left.col + diff &&
+      end.col <= left.col + diff &&
+      first.length !== 0
+    const startCol =
+      this.lineAt(start.line - 1) === first ? start.col : stillCaret ? start.col : start.col + diff
     const endCol = stillCaret
       ? end.col
       : this.lineAt(end.line - 1) === last
@@ -164,12 +185,18 @@ export class Buffer {
         startLine
       )
       let diff: number
-      if (text.trimStart().slice(0, 2) === comment) {
+      if (text.trimStart().slice(0, comment.length) === comment) {
         diff = -3
-        text = text.replace(new RegExp(`^([^/]*)${comment} ?`, 'gm'), '$1')
+        text = text.replace(new RegExp(`^([^${comment[0]}]*)${comment} ?`, 'gm'), '$1')
       } else {
         diff = +3
-        text = text.length === 0 ? comment + ' ' : text.replace(new RegExp(`^(?!$)([^/]{0,${left.col - 1}})`, 'gm'), `$1${comment} `)
+        text =
+          text.length === 0
+            ? comment + ' '
+            : text.replace(
+                new RegExp(`^(?!$)([^${comment[0]}]{0,${left.col - 1}})`, 'gm'),
+                `$1${comment} `
+              )
       }
       return { diff, text, left }
     })
@@ -181,7 +208,10 @@ export class Buffer {
     let slice = this.value.slice(selectionStart, selectionEnd)
     const c = this.options.comments
     const expanded = this.value.slice(selectionStart - c[1].length, selectionEnd + c[2].length)
-    if (expanded.indexOf(c[1]) === 0 && expanded.lastIndexOf(c[2]) === expanded.length - c[2].length) {
+    if (
+      expanded.indexOf(c[1]) === 0 &&
+      expanded.lastIndexOf(c[2]) === expanded.length - c[2].length
+    ) {
       slice = expanded
       selectionStart -= c[1].length
       selectionEnd += c[2].length
@@ -190,7 +220,11 @@ export class Buffer {
     if (slice.indexOf(c[1]) === 0 && slice.lastIndexOf(c[2]) === slice.length - c[2].length) {
       const ins = slice.slice(c[1].length, -c[2].length)
       this.insert(ins)
-      this.setSelectionRange(selectionStart, selectionEnd - c[1].length - c[2].length, selectionDirection)
+      this.setSelectionRange(
+        selectionStart,
+        selectionEnd - c[1].length - c[2].length,
+        selectionDirection
+      )
     } else {
       this.insert(c[1] + slice + c[2])
       const length = c[1].length
@@ -202,12 +236,13 @@ export class Buffer {
   indent(unindent?: boolean) {
     this.replaceBlock((text, startLine) => {
       const left = leftmost(text.split('\n'), startLine, 2)
+      const tabSize = this.options.tabStyle === 'tabs' ? 1 : this.options.tabSize
       let diff: number
       if (unindent) {
-        diff = -this.options.tabSize
-        text = text.replace(new RegExp(`^(\t| {1,${this.options.tabSize}})`, 'gm'), '')
+        diff = -tabSize
+        text = text.replace(new RegExp(`^(\t| {1,${tabSize}})`, 'gm'), '')
       } else {
-        diff = +this.options.tabSize
+        diff = +tabSize
         text = text.length === 0 ? this.tab : text.replace(/^[^\n]/gm, `${this.tab}$&`)
       }
       return { diff, text, left }
@@ -223,7 +258,10 @@ export class Buffer {
 
   moveCaretEnd(withSelection: boolean) {
     const { head, tail } = this.getRange()
-    this.moveCaretTo({ line: head.line, col: this.lineAt(head.line - 1).length + 1 }, withSelection ? tail : null)
+    this.moveCaretTo(
+      { line: head.line, col: this.lineAt(head.line - 1).length + 1 },
+      withSelection ? tail : null
+    )
   }
 
   moveCaretLines(lines: number, withSelection: boolean) {
@@ -236,7 +274,8 @@ export class Buffer {
   }
 
   moveLines(diff: number) {
-    const { start, end, hasSelection, selectionStart, selectionEnd, selectionDirection } = this.getRange()
+    const { start, end, hasSelection, selectionStart, selectionEnd, selectionDirection } =
+      this.getRange()
 
     const lines = this.value.split('\n')
     const notch = end.col === 1 && hasSelection ? 1 : 0
@@ -289,7 +328,8 @@ export class Buffer {
   }
 
   duplicate() {
-    const { start, end, hasSelection, selectionStart, selectionEnd, selectionDirection } = this.getRange()
+    const { start, end, hasSelection, selectionStart, selectionEnd, selectionDirection } =
+      this.getRange()
     const { numberOfLines } = this
 
     if (!hasSelection) {
