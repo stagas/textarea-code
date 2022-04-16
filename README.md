@@ -1,5 +1,5 @@
 <h1>
-textarea-code <a href="https://npmjs.org/package/textarea-code"><img src="https://img.shields.io/badge/npm-v2.0.0-F00.svg?colorA=000"/></a> <a href="src"><img src="https://img.shields.io/badge/loc-494-FFF.svg?colorA=000"/></a> <a href="https://cdn.jsdelivr.net/npm/textarea-code@2.0.0/dist/textarea-code.min.js"><img src="https://img.shields.io/badge/brotli-4.2K-333.svg?colorA=000"/></a> <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-F0B.svg?colorA=000"/></a>
+textarea-code <a href="https://npmjs.org/package/textarea-code"><img src="https://img.shields.io/badge/npm-v2.0.1-F00.svg?colorA=000"/></a> <a href="src"><img src="https://img.shields.io/badge/loc-494-FFF.svg?colorA=000"/></a> <a href="https://cdn.jsdelivr.net/npm/textarea-code@2.0.1/dist/textarea-code.min.js"><img src="https://img.shields.io/badge/brotli-4.2K-333.svg?colorA=000"/></a> <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-F0B.svg?colorA=000"/></a>
 </h1>
 
 <p></p>
