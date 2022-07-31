@@ -1,5 +1,12 @@
 import { Point, SelectionDirection } from './types'
 import { leftmost, startOfLine } from './util'
+import escapeRegExp from '@stdlib/utils-escape-regexp-string'
+
+// TODO: ctrl + delete|backspace should delete whitespace first,
+//   if there any before the text.
+//   e.g:
+//     (ctrl+del) |   foo -> |foo
+//     (ctrl+bks) foo   | ->  foo|
 
 export interface Options {
   tabStyle: 'spaces' | 'tabs'
@@ -65,6 +72,7 @@ export class Buffer {
       end,
       head,
       tail,
+      caretIndex: selectionDirection === 'forward' ? selectionEnd : selectionStart,
       hasSelection: selectionStart !== selectionEnd,
       selectionStart,
       selectionEnd,
@@ -185,13 +193,13 @@ export class Buffer {
       let diff: number
       if (text.trimStart().slice(0, comment.length) === comment) {
         diff = -3
-        text = text.replace(new RegExp(`^([^${comment[0]}]*)${comment} ?`, 'gm'), '$1')
+        text = text.replace(new RegExp(`^([^${escapeRegExp(comment[0])}]*)${escapeRegExp(comment)} ?`, 'gm'), '$1')
       } else {
         diff = +3
         text = text.length === 0
           ? comment + ' '
           : text.replace(
-            new RegExp(`^(?!$)([^${comment[0]}]{0,${left.col - 1}})`, 'gm'),
+            new RegExp(`^(?!$)([^${escapeRegExp(comment[0])}]{0,${left.col - 1}})`, 'gm'),
             `$1${comment} `
           )
       }
