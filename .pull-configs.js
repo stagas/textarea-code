@@ -7,10 +7,9 @@ const remote = 'https://github.com/stagas/typescript-minimal-template/raw/main/'
 const { assign, omit, sort, merge, replace } = pullConfigs(remote, local)
 
 merge('package.json', (prev, next) => {
-  prev.trustedDependencies ??= []
-  prev.trustedDependencies = [
-    ...new Set([...prev.trustedDependencies, ...(next.trustedDependencies ?? [])]),
-  ].sort()
+  // deprecated: now using ~/.trusted-npm-deps per system configuration
+  delete prev.trustedDependencies
+
   prev.types = next.types
   prev.scripts = next.scripts
   prev.files = next.files

@@ -18,7 +18,7 @@ export class TextAreaCodeElement extends $(HTMLTextAreaElement) {
   lineHeight = 16
   onKeyDown?: $.EventHandler<TextAreaCodeElement, KeyboardEvent>
 
-  mounted($: this['$']) {
+  mounted($: TextAreaCodeElement['$']) {
     $.effect(({ host }) => {
       host.style.whiteSpace = 'pre'
       host.setAttribute('wrap', 'off')

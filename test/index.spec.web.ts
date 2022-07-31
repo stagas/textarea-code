@@ -1,12 +1,15 @@
-// jsdom doesn't have ResizeObserver, so we polyfill it
-import ResizeObserverPolyfill from 'resize-observer-polyfill'
+// // jsdom doesn't have ResizeObserver, so we polyfill it
+// import ResizeObserverPolyfill from 'resize-observer-polyfill'
 import { TextAreaCodeElement } from '../src'
 
-window.ResizeObserver = ResizeObserverPolyfill
+// window.ResizeObserver = ResizeObserverPolyfill
 
 describe('TextAreaCodeElement', () => {
-  it('registers', () => {
+  beforeAll(() => {
     customElements.define('textarea-code', TextAreaCodeElement, { extends: 'textarea' })
+  })
+
+  it('registers', () => {
     expect(customElements.get('textarea-code')).toBe(TextAreaCodeElement)
   })
 
@@ -96,20 +99,18 @@ describe('TextAreaCodeElement', () => {
     // expect(textarea.comments).toEqual('// /* */')
   })
 
-  // web only tests
-  if (!window.navigator.userAgent.includes('jsdom')) {
-    it('adjusts pageSize on resize', async () => {
-      const textarea = document.createElement('textarea', {
-        is: 'textarea-code',
-      }) as TextAreaCodeElement
-      document.body.appendChild(textarea)
-      textarea.style.lineHeight = '16px'
-      textarea.style.height = '250px'
-      textarea.style.width = '100px'
-      expect(textarea.offsetHeight).toEqual(250)
-      // textarea.dispatchEvent(new Event('resize'))
-      await new Promise<void>(resolve => setTimeout(resolve, 10))
-      expect(textarea.pageSize).toEqual(14)
-    })
-  }
+  it('adjusts pageSize on resize', async () => {
+    const textarea = document.createElement('textarea', {
+      is: 'textarea-code',
+    }) as TextAreaCodeElement
+    document.body.appendChild(textarea)
+    textarea.style.lineHeight = '16px'
+    textarea.style.height = '250px'
+    textarea.style.width = '100px'
+    textarea.style.padding = '0'
+    textarea.style.border = 'none'
+    expect(textarea.offsetHeight).toEqual(250)
+    await new Promise<void>(resolve => setTimeout(resolve, 10))
+    expect(textarea.pageSize).toEqual(14)
+  })
 })
