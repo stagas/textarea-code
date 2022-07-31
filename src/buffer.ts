@@ -1,6 +1,6 @@
+import escapeRegExp from '@stdlib/utils-escape-regexp-string'
 import { Point, SelectionDirection } from './types'
 import { leftmost, startOfLine } from './util'
-import escapeRegExp from '@stdlib/utils-escape-regexp-string'
 
 // TODO: ctrl + delete|backspace should delete whitespace first,
 //   if there any before the text.
