@@ -1,5 +1,5 @@
 <h1>
-textarea-code <a href="https://npmjs.org/package/textarea-code"><img src="https://img.shields.io/badge/npm-v4.0.0-F00.svg?colorA=000"/></a> <a href="src"><img src="https://img.shields.io/badge/loc-501-FFF.svg?colorA=000"/></a> <a href="https://cdn.jsdelivr.net/npm/textarea-code@4.0.0/dist/textarea-code.min.js"><img src="https://img.shields.io/badge/brotli-20.1K-333.svg?colorA=000"/></a> <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-F0B.svg?colorA=000"/></a>
+textarea-code <a href="https://npmjs.org/package/textarea-code"><img src="https://img.shields.io/badge/npm-v4.0.1-F00.svg?colorA=000"/></a> <a href="src"><img src="https://img.shields.io/badge/loc-1,096-FFF.svg?colorA=000"/></a> <a href="https://cdn.jsdelivr.net/npm/textarea-code@4.0.1/dist/textarea-code.min.js"><img src="https://img.shields.io/badge/brotli-20K-333.svg?colorA=000"/></a> <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-F0B.svg?colorA=000"/></a>
 </h1>
 
 <p></p>
@@ -84,7 +84,6 @@ if (e.altKey || (cmdKey && e.shiftKey)) {
 
 ## Credits
 
-- [@stdlib/utils-escape-regexp-string](https://npmjs.org/package/@stdlib/utils-escape-regexp-string) by [The Stdlib Authors](https://github.com/graphs) &ndash; Escape a regular expression string or pattern.
 - [sigl](https://npmjs.org/package/sigl) by [stagas](https://github.com/stagas) &ndash; Web framework
 
 ## Contributing
